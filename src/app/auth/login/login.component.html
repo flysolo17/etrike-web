@@ -1,0 +1,66 @@
+<div class="d-flex align-items-center justify-content-center vh-100">
+  <div class="card w-25">
+    <div class="card-header">
+      <h6 class="card-title">Login</h6>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="loginForm$" (ngSubmit)="submit()">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input
+            type="text"
+            id="username"
+            class="form-control"
+            formControlName="username"
+            [ngClass]="{
+              'is-invalid':
+                loginForm$.get('username')?.invalid &&
+                loginForm$.get('username')?.touched
+            }"
+          />
+          <div
+            class="invalid-feedback"
+            *ngIf="
+              loginForm$.get('username')?.hasError('required') &&
+              loginForm$.get('username')?.touched
+            "
+          >
+            Username is required.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            formControlName="password"
+            [ngClass]="{
+              'is-invalid':
+                loginForm$.get('password')?.invalid &&
+                loginForm$.get('password')?.touched
+            }"
+          />
+          <div
+            class="invalid-feedback"
+            *ngIf="
+              loginForm$.get('password')?.hasError('required') &&
+              loginForm$.get('password')?.touched
+            "
+          >
+            Password is required.
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-primary w-100"
+          [disabled]="loginForm$.invalid"
+        >
+          Login
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<div class="d-flex vh-100">
+  <div
+    ngbNav
+    #nav="ngbNav"
+    class="nav-pills flex-column p-3"
+    style="width: 250px"
+    orientation="vertical"
+  >
+    <ng-container *ngFor="let tab of tabs" [ngbNavItem]="tab.route">
+      <button ngbNavLink [routerLink]="tab.route" routerLinkActive="true">
+        {{ tab.label }}
+      </button>
+      <ng-template ngbNavContent>
+        <router-outlet></router-outlet>
+      </ng-template>
+    </ng-container>
+  </div>
+
+  <div [ngbNavOutlet]="nav" class="ms-4 flex-grow-1">
+    <!-- Dynamic content based on active tab will appear here -->
+  </div>
+</div>

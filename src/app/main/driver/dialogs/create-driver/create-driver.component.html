@@ -1,0 +1,157 @@
+<div class="modal-header">
+  <h6 class="modal-title">Create Driver</h6>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="userAndFranchiseForm$" (ngSubmit)="submit()">
+    <!-- Name Field -->
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      <input
+        type="text"
+        id="name"
+        formControlName="name"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          userAndFranchiseForm$.get('name')?.invalid &&
+          userAndFranchiseForm$.get('name')?.touched
+        "
+        class="text-danger"
+      >
+        <small>Name is required.</small>
+      </div>
+    </div>
+
+    <!-- Phone Field -->
+    <div class="mb-3">
+      <label for="phone" class="form-label">Phone</label>
+      <input
+        type="text"
+        id="phone"
+        formControlName="phone"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          userAndFranchiseForm$.get('phone')?.invalid &&
+          userAndFranchiseForm$.get('phone')?.touched
+        "
+        class="text-danger"
+      >
+        <small *ngIf="userAndFranchiseForm$.get('phone')?.hasError('required')"
+          >Phone number is required.</small
+        >
+      </div>
+    </div>
+
+    <!-- Email Field -->
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          userAndFranchiseForm$.get('email')?.invalid &&
+          userAndFranchiseForm$.get('email')?.touched
+        "
+        class="text-danger"
+      >
+        <small *ngIf="userAndFranchiseForm$.get('email')?.hasError('required')"
+          >Email is required.</small
+        >
+        <small *ngIf="userAndFranchiseForm$.get('email')?.hasError('email')"
+          >Please enter a valid email address.</small
+        >
+      </div>
+    </div>
+
+    <!-- User Type Field -->
+    <div class="mb-3">
+      <label for="type" class="form-label">User Type</label>
+      <input
+        type="text"
+        readonly
+        id="type"
+        formControlName="type"
+        value="DRIVER"
+        class="form-control"
+      />
+    </div>
+
+    <!-- Franchise Number Field -->
+    <div class="mb-3">
+      <label for="franchiseNumber" class="form-label">Franchise Number</label>
+      <input
+        type="text"
+        readonly
+        id="franchiseNumber"
+        formControlName="franchiseNumber"
+        class="form-control"
+      />
+      <small class="form-text text-muted">
+        The franchise number is auto-generated and used to create the default
+        password for the account.
+      </small>
+    </div>
+
+    <!-- License Number Field -->
+    <div class="mb-3">
+      <label for="licenseNumber" class="form-label">License Number</label>
+      <input
+        type="text"
+        id="licenseNumber"
+        formControlName="licenseNumber"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          userAndFranchiseForm$.get('licenseNumber')?.invalid &&
+          userAndFranchiseForm$.get('licenseNumber')?.touched
+        "
+        class="text-danger"
+      >
+        <small>License number is required.</small>
+      </div>
+    </div>
+
+    <!-- Expiration Date Field -->
+    <div class="mb-3">
+      <label for="expiration" class="form-label">Expiration Date</label>
+      <input
+        type="date"
+        id="expiration"
+        formControlName="expiration"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          userAndFranchiseForm$.get('expiration')?.invalid &&
+          userAndFranchiseForm$.get('expiration')?.touched
+        "
+        class="text-danger"
+      >
+        <small>Expiration date is required.</small>
+      </div>
+    </div>
+
+    <!-- Modal Footer with Submit and Cancel Buttons -->
+    <div class="modal-footer">
+      <button class="btn btn-light" type="button" (click)="activeModal.close()">
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="userAndFranchiseForm$.invalid"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div>
