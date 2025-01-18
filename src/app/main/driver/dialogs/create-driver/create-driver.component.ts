@@ -51,6 +51,13 @@ export class CreateDriverComponent {
         type: formValues.type,
         active: false,
         createdAt: new Date(),
+        location: {
+          lastUpdated: new Date(),
+          enableTracking: false,
+        },
+        pin: {
+          biometricEnabled: false,
+        },
       };
 
       const franchise: Franchise = {
@@ -62,7 +69,7 @@ export class CreateDriverComponent {
         expiration: formValues.expiration,
         createdAt: new Date(),
         updatedAt: new Date(),
-        status: FranchiseStatus.PENDING,
+        status: FranchiseStatus.ACTIVE,
       };
 
       const response = await this.driverService.createDriverAccount(

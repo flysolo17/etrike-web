@@ -14,8 +14,8 @@ import {
 import { combineLatest, map, Observable } from 'rxjs';
 import { DriverWithFranchises } from '../models/driver/DriverWithFranchises';
 
-const USERS_COLLECTION = 'users';
-const FRANCHISE_COLLECTION = 'franchise';
+export const USERS_COLLECTION = 'users';
+export const FRANCHISE_COLLECTION = 'franchise';
 @Injectable({
   providedIn: 'root',
 })

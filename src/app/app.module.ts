@@ -17,6 +17,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateDriverComponent } from './main/driver/dialogs/create-driver/create-driver.component';
 import { BookingComponent } from './main/booking/booking.component';
 import { ReportComponent } from './main/report/report.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { AdministrationComponent } from './main/administration/administration.component';
+import { DocumentsComponent } from './main/documents/documents.component';
+import { HelpComponent } from './main/help/help.component';
+import { UserProfileComponent } from './shared/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +34,10 @@ import { ReportComponent } from './main/report/report.component';
     CreateDriverComponent,
     BookingComponent,
     ReportComponent,
+    AdministrationComponent,
+    DocumentsComponent,
+    HelpComponent,
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,6 +45,7 @@ import { ReportComponent } from './main/report/report.component';
     NgbModule,
     ReactiveFormsModule,
     FormsModule,
+    FontAwesomeModule,
   ],
   providers: [
     provideFirebaseApp(() =>

@@ -1,1 +1,58 @@
-<p>users works!</p>
+<div class="container-fluid p-3">
+  <div class="bg-white">
+    <div class="d-flex flex-column">
+      <div
+        class="d-flex justify-content-between align-items-center p-3 bg-dark text-light"
+      >
+        <h5>Passenger's Account</h5>
+        <input
+          type="text"
+          class="form-control w-25"
+          placeholder="Search..."
+          [formControl]="searrchTerm$"
+        />
+      </div>
+      <table class="table table-borderless table-hover">
+        <thead>
+          <tr>
+            <th>Fullname</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Active</th>
+            <th>Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of filteredPassengers$ | async">
+            <td>
+              <div class="d-flex gap-1 align-items-center">
+                <img
+                  [src]="user.profile || '../../../assets/images/person.png'"
+                  alt="placeholder"
+                  class="rounded-circle"
+                  width="40"
+                  height="40"
+                />
+                <h6>{{ user.name }}</h6>
+              </div>
+            </td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phone }}</td>
+            <td>
+              <span
+                class="badge"
+                [ngClass]="{
+                  'text-bg-success': user?.active === true,
+                  'text-bg-secondary': user?.active === false
+                }"
+              >
+                {{ user.active ? "Active" : "Not Active" }}
+              </span>
+            </td>
+            <td>{{ user.createdAt | date : "medium" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
