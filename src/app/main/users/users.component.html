@@ -1,58 +1,136 @@
-<div class="container-fluid p-3">
-  <div class="bg-white">
-    <div class="d-flex flex-column">
-      <div
-        class="d-flex justify-content-between align-items-center p-3 bg-dark text-light"
-      >
-        <h5>Passenger's Account</h5>
-        <input
-          type="text"
-          class="form-control w-25"
-          placeholder="Search..."
-          [formControl]="searrchTerm$"
-        />
-      </div>
-      <table class="table table-borderless table-hover">
-        <thead>
-          <tr>
-            <th>Fullname</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Active</th>
-            <th>Created At</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let user of filteredPassengers$ | async">
-            <td>
-              <div class="d-flex gap-1 align-items-center">
-                <img
-                  [src]="user.profile || '../../../assets/images/person.png'"
-                  alt="placeholder"
-                  class="rounded-circle"
-                  width="40"
-                  height="40"
-                />
-                <h6>{{ user.name }}</h6>
+<div class="container-fluid min-vh-100 p-3">
+  <div class="row g-3">
+    <div class="col">
+      <div class="box box-1">
+        <small class="text-muted">Users</small>
+        <div class="d-flex gap-2 mt-3">
+          <ng-container *ngIf="passengers$ | async as passengers; else loading">
+            <ng-container *ngIf="driver$ | async as drivers">
+              <div class="d-flex flex-column flex-fill">
+                <h6>{{ passengers }}</h6>
+                <small class="text-muted">Passengers</small>
               </div>
-            </td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.phone }}</td>
-            <td>
-              <span
-                class="badge"
-                [ngClass]="{
-                  'text-bg-success': user?.active === true,
-                  'text-bg-secondary': user?.active === false
-                }"
-              >
-                {{ user.active ? "Active" : "Not Active" }}
-              </span>
-            </td>
-            <td>{{ user.createdAt | date : "medium" }}</td>
-          </tr>
-        </tbody>
-      </table>
+              <div class="d-flex flex-column flex-fill">
+                <h6>{{ drivers }}</h6>
+                <small class="text-muted">Drivers</small>
+              </div>
+              <div class="d-flex flex-column flex-fill">
+                <h6>{{ (drivers || 0) + (passengers || 0) }}</h6>
+                <small class="text-muted">All</small>
+              </div>
+            </ng-container>
+          </ng-container>
+          <ng-template #loading>
+            <div class="d-flex flex-column flex-fill">
+              <h6>Loading...</h6>
+              <small class="text-muted">Passengers</small>
+            </div>
+            <div class="d-flex flex-column flex-fill">
+              <h6>Loading...</h6>
+              <small class="text-muted">Drivers</small>
+            </div>
+            <div class="d-flex flex-column flex-fill">
+              <h6>Loading...</h6>
+              <small class="text-muted">All</small>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="box box-2">
+        <small class="text-muted">All Users</small>
+        <div class="d-flex gap-2 mt-3">
+          <div class="d-flex flex-column flex-fill">
+            <h6>{{ activerUsers$ | async }}</h6>
+            <small class="text-muted">Active</small>
+          </div>
+          <div class="d-flex flex-column flex-fill">
+            <h6>{{ inActiveUsers$ | async }}</h6>
+            <small class="text-muted">Inactive</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="box">
+        <div class="d-flex align-items-center justify-content-between">
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [(activeId)]="selectedTab$"
+            class="nav-pills"
+          >
+            <li *ngFor="let tab of tabs" [ngbNavItem]="tab">
+              <button ngbNavLink (click)="selectTab(tab)">{{ tab }}</button>
+              <ng-template ngbNavContent>
+                <table class="table table-borderless table-hover">
+                  <thead>
+                    <tr>
+                      <th>Fullname</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Active</th>
+                      <th>Created At</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let user of filteredUsers$ | async"
+                      [routerLink]="user.id"
+                    >
+                      <td>
+                        <div class="d-flex gap-1 align-items-center">
+                          <img
+                            [src]="
+                              user.profile ||
+                              '../../../assets/images/person.png'
+                            "
+                            alt="placeholder"
+                            class="rounded-circle"
+                            width="40"
+                            height="40"
+                          />
+                          <h6>{{ user.name }}</h6>
+                        </div>
+                      </td>
+                      <td>{{ user.email }}</td>
+                      <td>{{ user.phone }}</td>
+                      <td>
+                        <span
+                          class="badge"
+                          [ngClass]="{
+                            'text-bg-success': user?.active === true,
+                            'text-bg-secondary': user?.active === false
+                          }"
+                        >
+                          {{ user.active ? "Active" : "Not Active" }}
+                        </span>
+                      </td>
+                      <td>{{ user.createdAt | date : "MM/dd/yyyy" }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </ng-template>
+            </li>
+          </ul>
+          <div class="d-flex gap-2 p-3 align-items-center">
+            <input
+              type="text"
+              class="form-control search-input flex-grow-1"
+              placeholder="Search..."
+              style="width: 200px"
+              [formControl]="searchTerm$"
+            />
+            <button class="btn btn-success" (click)="createDriver()">
+              Create
+            </button>
+          </div>
+        </div>
+
+        <div [ngbNavOutlet]="nav"></div>
+      </div>
     </div>
   </div>
 </div>

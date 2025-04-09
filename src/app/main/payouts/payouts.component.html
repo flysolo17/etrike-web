@@ -1,0 +1,124 @@
+<div class="container-fluid min-vh-100">
+  <div class="row g-3">
+    <div class="col">
+      <div class="box box-1">
+        <small class="text-muted">Payouts</small>
+        <div class="d-flex gap-2 mt-3">
+          <div class="flex-grow-1">
+            <h6 class="text-danger">{{ (requests$ | async)?.length }}</h6>
+            <small class="text-muted">Pending</small>
+          </div>
+          <div class="flex-grow-1">
+            <h6>{{ (payouts$ | async)?.length }}</h6>
+            <small class="text-muted">Total</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="box box-2">
+        <small class="text-muted">Last 7 Days</small>
+        <div class="d-flex gap-2 mt-3">
+          <div class="flex-grow-1">
+            <h6>{{ (completed$ | async)?.length }}</h6>
+            <small class="text-muted">Completed</small>
+          </div>
+          <div class="flex-grow-1">
+            <h6 *ngIf="totalAmount | async as total" class="text-success">
+              {{ total | currency : "PHP" }}
+            </h6>
+            <small class="text-muted">Total Amount</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="box box-3">
+        <small class="text-muted">Last 7 Days</small>
+        <div class="d-flex gap-2 mt-3">
+          <div class="flex-grow-1">
+            <h6>{{ 0 }}</h6>
+            <small class="text-muted">Processing</small>
+          </div>
+          <div class="flex-grow-1">
+            <h6>{{ 0 }}</h6>
+            <small class="text-muted">Failed</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="box">
+        <h5 class="mb-3">Payouts</h5>
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <input
+            type="text"
+            class="form-control w-25 search-input"
+            placeholder="Search by receiver"
+            [formControl]="searchTerm$"
+          />
+          <div class="d-flex gap-3" [class.d-none]="!hasSelectedPayout">
+            <button class="btn btn-outline-dark" (click)="toggleSelectAll()">
+              {{ isAllPayoutSelected ? "Unselect All" : "Select All" }}
+            </button>
+            <button class="btn btn-dark" (click)="batchPayout()">
+              Batch Payout
+            </button>
+          </div>
+        </div>
+        <ul ngbNav #nav="ngbNav" [(activeId)]="selectedTab$" class="nav-pills">
+          <li *ngFor="let tab of tabs" [ngbNavItem]="tab">
+            <button ngbNavLink (click)="selectTab(tab)">
+              <small>{{ tab | titlecase }}</small>
+            </button>
+            <ng-template ngbNavContent>
+              <table class="table table-borderless table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Recipient</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Created At</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (payout of filteredPayouts$ | async; track
+                  payout.receiver; let i = $index) {
+                  <tr>
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>
+                      {{ payout.receiver }}
+                    </td>
+
+                    <td>{{ payout.recipientType }}</td>
+                    <td>{{ payout.amount.value | currency : "PHP" }}</td>
+                    <td>
+                      {{ payout.createdAt | date : "MMM dd, yyyy hh:mm aa" }}
+                    </td>
+                    <td>
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        *ngIf="
+                          payout.id !== undefined && payout.status === 'PENDING'
+                        "
+                        [(ngModel)]="selectedPayouts[payout.id]"
+                      />
+                    </td>
+                  </tr>
+                  }
+                </tbody>
+              </table>
+            </ng-template>
+          </li>
+        </ul>
+        <div [ngbNavOutlet]="nav"></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,95 +1,181 @@
-<div class="container-fluid p-3">
-  <div class="bg-white">
-    <div class="d-flex flex-column">
-      <div
-        class="d-flex justify-content-between align-items-center p-3 bg-dark text-light"
-      >
-        <h5>Bookings</h5>
-        <input
-          type="text"
-          class="form-control w-25"
-          placeholder="Search by id , passenger and driver..."
-          [formControl]="searchTerm$"
-        />
+<div class="container-fluid min-vh-100 p-3">
+  <div class="row g-3">
+    <div class="col">
+      <div class="box box-1">
+        <small class="text-muted">Ongoing Transactions</small>
+        <div class="d-flex gap-2 mt-3">
+          <div class="flex-grow-1">
+            <h6>{{ (pending$ | async)?.length }}</h6>
+            <small class="text-muted">Pending</small>
+          </div>
+          <div class="flex-grow-1">
+            <h6>{{ (accepted$ | async)?.length }}</h6>
+            <small class="text-muted">Accepted</small>
+          </div>
+        </div>
       </div>
-      <table class="table table-borderless table-hover">
-        <thead>
-          <tr>
-            <th>Booking ID</th>
-            <th>Passenger</th>
-            <th>Booking Details</th>
-            <th>Driver</th>
-            <th>Status</th>
-            <th>Created At</th>
-            <th>Last Updated</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let booking of filteredBookings$ | async">
-            <td>
-              <h6 class="fw-bold">{{ booking.transactionID }}</h6>
-            </td>
-            <td>
-              <app-user-profile [user]="booking.passenger" />
-            </td>
-            <td>
-              <div>
-                <h6
-                  *ngIf="
-                    booking.transactions?.scheduleDate !== null ||
-                    booking.transactions?.scheduleDate !== undefined
-                  "
-                >
-                  <span class="text-muted">Schedule Date : </span>
-                  {{
-                    booking.transactions?.scheduleDate
-                      | date : "MMM dd, hh:mm a"
-                  }}
-                </h6>
-                <h6>
-                  <span class="text-muted">Pickup : </span>
-                  {{ booking.transactions?.locationDetails?.pickup?.name }}
-                </h6>
+    </div>
 
-                <h6>
-                  <span class="text-muted">Drop OFF : </span>
-                  {{ booking.transactions?.locationDetails?.dropOff?.name }}
-                </h6>
-              </div>
-            </td>
-            <td>
-              <app-user-profile [user]="booking.driver" />
-            </td>
-            <td>
-              <span
-                class="badge"
-                [ngClass]="{
-                  'text-bg-warning':
-                    booking?.transactions?.status === 'PENDING' ||
-                    booking?.transactions?.status === 'OTW',
-                  'text-bg-success':
-                    booking?.transactions?.status === 'CONFIRMED' ||
-                    booking?.transactions?.status === 'ACCEPTED',
-                  'text-bg-primary':
-                    booking?.transactions?.status === 'COMPLETED',
-                  'text-bg-danger':
-                    booking?.transactions?.status === 'CANCELLED',
-                  'text-bg-secondary':
-                    booking?.transactions?.status === 'FAILED'
-                }"
-              >
-                {{ booking?.transactions?.status }}
-              </span>
-            </td>
-            <td>
-              {{ booking.transactions?.createdAt | date : "MMM dd, hh:mm a" }}
-            </td>
-            <td>
-              {{ booking.transactions?.updatedAt | date : "MMM dd, hh:mm a" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="col">
+      <div class="box box-2">
+        <small class="text-muted">Last 7 Days</small>
+        <div class="d-flex gap-2 mt-3">
+          <div class="flex-grow-1">
+            <h6>{{ (completed$ | async)?.length }}</h6>
+            <small class="text-muted">Completed</small>
+          </div>
+          <div class="flex-grow-1">
+            <h6>{{ (cancelled$ | async)?.length }}</h6>
+            <small class="text-muted">Cancelled</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="box box-3">
+        <small class="text-muted">Last 7 Days</small>
+        <div class="d-flex gap-2 mt-3">
+          <div class="flex-grow-1">
+            <h6>{{ (otw$ | async)?.length }}</h6>
+            <small class="text-muted">On the way</small>
+          </div>
+          <div class="flex-grow-1">
+            <h6>{{ (failed$ | async)?.length }}</h6>
+            <small class="text-muted">Failed</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="box">
+        <h5 class="mb-3">Bookings</h5>
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <input
+            type="text"
+            class="form-control w-25 search-input"
+            placeholder="Search by id, passenger, and driver..."
+            [formControl]="searchTerm$"
+          />
+          <div class="d-flex align-items-center justify-content-end gap-3">
+            <app-date-range-picker
+              [fromDate]="selectedFromDate"
+              [toDate]="selectedToDate"
+              (rangeSelected)="handleDateRange($event)"
+            >
+            </app-date-range-picker>
+            <button class="btn btn-success rounded-1" (click)="download()">
+              Download
+            </button>
+          </div>
+        </div>
+
+        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-pills">
+          <li *ngFor="let tab of tabs$" [ngbNavItem]="tab">
+            <button ngbNavLink (click)="selectTab(tab)">
+              <small>{{ tab | titlecase }}</small>
+            </button>
+            <ng-template ngbNavContent>
+              <table class="table table-borderless table-hover w-100">
+                <thead>
+                  <tr>
+                    <th><small>Booking ID</small></th>
+                    <th><small>Passenger</small></th>
+                    <th><small>Booking Details</small></th>
+                    <th><small>Driver</small></th>
+
+                    <th><small>Last Updated</small></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let booking of filteredBookings$ | async">
+                    <td>
+                      <small class="fw-bold">{{ booking.transactionID }}</small>
+                    </td>
+                    <td>
+                      <app-user-profile [user]="booking.passenger" />
+                    </td>
+                    <td>
+                      <div>
+                        <small *ngIf="booking.transactions?.scheduleDate">
+                          <span class="text-muted">Schedule Date:</span>
+                          {{
+                            booking.transactions?.scheduleDate
+                              | date : "MMM dd, hh:mm a"
+                          }}
+                        </small>
+                        <ul class="list-unstyled mb-0">
+                          <li>
+                            <small>
+                              <span class="text-muted">Pickup:</span>
+
+                              {{
+                                booking.transactions?.locationDetails?.pickup
+                                  ?.name
+                              }}
+                            </small>
+                          </li>
+                          <li>
+                            <small>
+                              <span class="text-muted">Drop Off:</span>
+
+                              {{
+                                booking.transactions?.locationDetails?.dropOff
+                                  ?.name
+                              }}
+                            </small>
+                          </li>
+                        </ul>
+                      </div>
+                    </td>
+
+                    <td>
+                      <app-user-profile [user]="booking.driver" />
+                    </td>
+                    <!-- <td>
+                      <span
+                        class="badge"
+                        [ngClass]="{
+                          'text-bg-warning':
+                            booking?.transactions?.status === 'PENDING' ||
+                            booking?.transactions?.status === 'OTW',
+                          'text-bg-success':
+                            booking?.transactions?.status === 'CONFIRMED' ||
+                            booking?.transactions?.status === 'ACCEPTED',
+                          'text-bg-primary':
+                            booking?.transactions?.status === 'COMPLETED',
+                          'text-bg-danger':
+                            booking?.transactions?.status === 'CANCELLED',
+                          'text-bg-secondary':
+                            booking?.transactions?.status === 'FAILED'
+                        }"
+                      >
+                        <small>
+                          {{ booking?.transactions?.status }}
+                        </small>
+                      </span>
+                    </td> -->
+
+                    <td>
+                      <small class="text-muted">
+                        {{
+                          booking.transactions?.updatedAt
+                            | date : "MMM dd, hh:mm"
+                        }}
+                      </small>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-template>
+          </li>
+        </ul>
+        <div
+          [ngbNavOutlet]="nav"
+          style="max-height: 750px; overflow: auto"
+        ></div>
+      </div>
     </div>
   </div>
 </div>

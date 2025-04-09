@@ -1,0 +1,53 @@
+.box-1 {
+  border-left: 16px solid #5474c4;
+}
+.box-2 {
+  border-left: 16px solid #91cc75;
+}
+
+.box-3 {
+  border-left: 16px solid #73c0de;
+}
+
+/* tabs */
+
+.nav-pills {
+  display: flex;
+  width: 100%;
+}
+
+.nav-pills li {
+  flex-grow: 1;
+}
+
+.nav-pills button {
+  width: 100%;
+  text-align: center;
+}
+
+.nav-fill .nav-link {
+  border: none;
+  color: darkgrey;
+}
+.nav-pills .nav-link.active {
+  background-color: var(--bg-dark);
+  color: white;
+}
+
+.tab-content {
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 300px; /* Adjust as needed */
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  background-color: #f4f5f7; /* Light gray background */
+  font-size: 14px;
+  color: #333; /* Dark text */
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}

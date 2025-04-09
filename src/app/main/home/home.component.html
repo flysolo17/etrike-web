@@ -1,30 +1,82 @@
 <div class="container-fluid p-3">
   <div class="row g-3">
-    <div class="col">
+    <div class="col-8">
       <div class="box bg-dark text-light">
-        <small>Passengers</small>
-        <h5>{{ passengers }}</h5>
+        <small>Users</small>
+        <div class="d-flex gap-2 mt-3">
+          <div class="flex-grow-1">
+            <h6>{{ drivers + passengers }}</h6>
+            <small>All</small>
+          </div>
+          <div class="flex-grow-1">
+            <h6>{{ drivers }}</h6>
+            <small>Drivers</small>
+          </div>
+          <div class="flex-grow-1">
+            <h6>{{ passengers }}</h6>
+            <small class="">Passengers</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="box bg-dark text-light">
+        <small>Notifications</small>
+        <div class="d-flex gap-2 mt-3">
+          <div class="flex-grow-1">
+            <h6>{{ 0 }}</h6>
+            <small>Emergencies</small>
+          </div>
+          <div class="flex-grow-1">
+            <h6>{{ (reports$ | async)?.length }}</h6>
+            <small>Reports</small>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="col">
-      <div class="box bg-dark text-light">
-        <small>Driver</small>
-        <h5>{{ drivers }}</h5>
+    <div class="col-8">
+      <div
+        class="box"
+        style="height: 450px"
+        *ngIf="dailyBooking$ | async as dailyBooking"
+      >
+        <canvasjs-chart [options]="dailyBooking"></canvasjs-chart>
       </div>
     </div>
+    <div class="col-4">
+      <div class="d-flex flex-column gap-3" style="height: 450px">
+        <div class="box flex-grow-1">
+          <h5>Top Rated Drivers</h5>
+          <ul class="list-group list-group-flush">
+            @for (item of topFiveDrivers$; track $index) {
+            <li
+              class="list-group-item d-flex align-items-center justify-content-between"
+            >
+              <h6>{{ item.driver?.name }}</h6>
 
-    <div class="col">
-      <div class="box bg-dark text-light">
-        <small>Report</small>
-        <h5>0</h5>
-      </div>
-    </div>
+              <small class="text-warning fw-light">
+                {{ item.total | formatNumber }} stars
+              </small>
+            </li>
+            }
+          </ul>
+        </div>
+        <div class="box flex-grow-1">
+          <h5>Most Active Users</h5>
+          <ul class="list-group list-group-flush">
+            <li
+              *ngFor="let user of mostActiveUsers$"
+              class="list-group-item d-flex align-items-center justify-content-between"
+            >
+              <h6>{{ user.user?.name }}</h6>
 
-    <div class="col">
-      <div class="box bg-dark text-light">
-        <small>Emergency</small>
-        <h5>0</h5>
+              <small class="text-warning fw-light">
+                {{ user.totalBookings }} Bookings
+              </small>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

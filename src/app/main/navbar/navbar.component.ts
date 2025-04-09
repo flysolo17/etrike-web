@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   faHouseDamage,
   faUserTie,
@@ -14,6 +14,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Router } from '@angular/router';
+import { AdministratorService } from '../../services/administrator.service';
+import { faPaypal } from '@fortawesome/free-brands-svg-icons';
+import { Administrator } from '../../models/administrator/Administrator';
 interface Tabs {
   label: string;
   route: string;
@@ -24,7 +27,7 @@ interface Tabs {
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   hamburger = faBars;
   tabs: Tabs[] = [
     {
@@ -33,13 +36,8 @@ export class NavbarComponent {
       selectedIcon: faBox,
     },
     {
-      label: 'Driver',
-      route: 'driver',
-      selectedIcon: faUserTie,
-    },
-    {
-      label: 'Passenger',
-      route: 'passenger',
+      label: 'Users',
+      route: 'users',
       selectedIcon: faUsers,
     },
     {
@@ -67,15 +65,32 @@ export class NavbarComponent {
       route: 'help',
       selectedIcon: faQuestionCircle,
     },
+    {
+      label: 'Payouts',
+      route: 'payouts',
+      selectedIcon: faPaypal,
+    },
   ];
 
-  isCollapsed = false;
-  constructor(private cdr: ChangeDetectorRef, private router: Router) {}
-
-  toggleSidebar() {
-    this.isCollapsed = !this.isCollapsed;
-    this.cdr.detectChanges();
+  admin$: Administrator | null = null;
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private administratorService: AdministratorService
+  ) {}
+  ngOnInit(): void {
+    let id = localStorage.getItem('id');
+    if (id !== null) {
+      this.administratorService.getAdministrator(id).subscribe((data) => {
+        this.admin$ = data;
+      });
+    }
   }
+
+  logout() {
+    this.administratorService.logout();
+  }
+
   isRouteActive(route: string): boolean {
     return this.router.url.includes(route);
   }

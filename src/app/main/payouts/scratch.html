@@ -1,0 +1,48 @@
+<div class="container-fluid">
+  <div
+    class="p-3 text-white bg-dark d-flex align-items-center justify-content-between"
+  >
+    <h5>Payout Request</h5>
+    <div class="d-flex gap-3" [class.d-none]="!hasSelectedPayout">
+      <button class="btn btn-outline-light" (click)="toggleSelectAll()">
+        {{ isAllPayoutSelected ? "Unselect All" : "Select All" }}
+      </button>
+      <button class="btn btn-light" (click)="batchPayout()">
+        Batch Payout
+      </button>
+    </div>
+  </div>
+  <table class="table table-borderless table-hover">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Recipient</th>
+        <th scope="col">Type</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Created At</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (payout of requests$ | async; track payout.receiver; let i = $index)
+      {
+      <tr>
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ payout.receiver }}</td>
+
+        <td>{{ payout.recipientType }}</td>
+        <td>{{ payout.amount.value | currency : "PHP" }}</td>
+        <td>{{ payout.createdAt | date : "MMM dd, yyyy hh:mm aa" }}</td>
+        <td>
+          <input
+            class="form-check-input"
+            type="checkbox"
+            *ngIf="payout.id !== undefined"
+            [(ngModel)]="selectedPayouts[payout.id]"
+          />
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

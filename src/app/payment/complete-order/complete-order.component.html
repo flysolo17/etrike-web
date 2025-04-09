@@ -1,0 +1,41 @@
+<div class="box bg-primary">
+  <div class="" *ngIf="loading">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div class="card" *ngIf="!loading && hasError == null">
+    <div class="card-body">
+      <div
+        class="container-fluid d-flex flex-column align-items-center justify-content-center gap-3"
+      >
+        <h5 class="text-primary">Etrike Wallet Cash In</h5>
+        <img
+          [src]="
+            user?.profile !== undefined && user?.profile !== 'null'
+              ? user?.profile
+              : '../../../assets/images/person.png'
+          "
+          alt="placeholder"
+          class="rounded-circle"
+          width="60"
+          height="60"
+        />
+        <h5>{{ user?.name }}</h5>
+
+        <hr />
+        <div
+          class="d-flex align-items-center justify-content-between p-3 w-100"
+        >
+          <h6 class="text-muted">Amount</h6>
+          <h4>{{ totalAmount | currency : "PHP" }}</h4>
+        </div>
+        <hr />
+        <p>Sent via Paypal</p>
+      </div>
+    </div>
+  </div>
+  <div class="bg-white p-3 rounded-3" *ngIf="!loading && hasError != null">
+    <p class="text-muted">{{ hasError }}</p>
+  </div>
+</div>

@@ -34,6 +34,13 @@ export function getActiveFranchise(franchise: Franchise[]): string[] {
   return data;
 }
 
+export function getLatestFranchiseStatus(franchise: Franchise[]): string {
+  let data = franchise.sort(
+    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+  );
+  return data[0].status;
+}
+
 export const FranchiseConverter = {
   toFirestore: (data: Franchise) => data,
   fromFirestore: (snap: QueryDocumentSnapshot) => {

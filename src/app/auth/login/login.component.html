@@ -1,9 +1,13 @@
 <div class="d-flex align-items-center justify-content-center vh-100">
   <div class="card w-25">
-    <div class="card-header">
-      <h6 class="card-title">Login</h6>
-    </div>
     <div class="card-body">
+      <img
+        src="../../../assets/images/logo.png"
+        class="img-fluid d-block mx-auto"
+        alt="logo"
+      />
+
+      <h6 class="card-title text-center">Login to ETRIKE</h6>
       <form [formGroup]="loginForm$" (ngSubmit)="submit()">
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>

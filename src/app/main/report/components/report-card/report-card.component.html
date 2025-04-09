@@ -1,0 +1,29 @@
+<div class="p-3 rounded-3 border">
+  <div class="row">
+    <div class="col-2">
+      <img
+        [src]="report.passenger?.profile || '../../../assets/images/person.png'"
+        alt="placeholder"
+        class="rounded-circle"
+        width="50"
+        height="50"
+      />
+    </div>
+    <div class="col-10">
+      <div class="d-flex flex-column gap-0">
+        <h6 class="fw-bold">{{ report.passenger?.name }}</h6>
+        <span class="text-muted">{{ report.passenger?.phone }}</span>
+      </div>
+    </div>
+    <div class="col-12">
+      <h6>Issues : {{ report.issues }}</h6>
+
+      <p>
+        {{ report.details }}
+      </p>
+    </div>
+    <div class="col-12 text-end">
+      <button class="btn btn-sm btn-outline-secondary">View Details</button>
+    </div>
+  </div>
+</div>

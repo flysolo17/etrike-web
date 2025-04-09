@@ -5,10 +5,12 @@ import { DriverService } from '../../services/driver.service';
 import {
   countActiveFranchise,
   Franchise,
+  FranchiseStatus,
   getActiveFranchise,
 } from '../../models/driver/Franchise';
 import { FormControl } from '@angular/forms';
 import { map } from 'rxjs';
+import { Toast, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-driver',
@@ -17,17 +19,25 @@ import { map } from 'rxjs';
 })
 export class DriverComponent implements OnInit {
   modalService = inject(NgbModal);
-  searchTem$ = new FormControl('');
+
+  searchTerm$ = new FormControl('');
   drivers$ = this.driverService.getDriverWithFranchises();
   filterDrivers$ = this.drivers$;
   createDriver() {
     const modal = this.modalService.open(CreateDriverComponent, {
-      size: 'xl',
+      size: 'md',
     });
   }
-  constructor(private driverService: DriverService) {}
+  status$: FranchiseStatus[] = Object.keys(
+    FranchiseStatus
+  ) as FranchiseStatus[];
+  constructor(
+    private driverService: DriverService,
+    private toastr: ToastrService
+  ) {}
+
   ngOnInit(): void {
-    this.searchTem$.valueChanges.subscribe((searchTem) => {
+    this.searchTerm$.valueChanges.subscribe((searchTem) => {
       if (searchTem === '') {
         this.filterDrivers$ = this.drivers$;
       } else {
@@ -56,5 +66,16 @@ export class DriverComponent implements OnInit {
 
   getActiveFranchise(franchise: Franchise[]): string[] {
     return getActiveFranchise(franchise);
+  }
+  updateFranchiseStatus(status: FranchiseStatus, franchise: Franchise[]) {
+    if (franchise.length < 1) {
+      this.toastr.error('no  franchise yet');
+      return;
+    }
+    const active = franchise[0];
+    this.driverService
+      .updateFranchiseStatus(active.id, status)
+      .then((data) => this.toastr.success('Successfully Updated'))
+      .catch((e) => this.toastr.error(e['message']));
   }
 }

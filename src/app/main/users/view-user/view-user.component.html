@@ -1,0 +1,28 @@
+<div class="container-fluid p-3" *ngIf="user$ | async as user">
+  <div class="bg-dark p-3 box text-light">
+    <h6>Profile</h6>
+    <div class="d-flex gap-3">
+      <img
+        [src]="
+          user.profile ? user.profile : '../../../../assets/images/person.png'
+        "
+        class="img-fluid rounded-circle"
+        alt="profile"
+        height="60px"
+        width="60px"
+      />
+      <div class="flex-grow-1">
+        <h6>{{ user.name }} ({{ user.type }})</h6>
+        <small>{{ user.email }}</small>
+      </div>
+    </div>
+  </div>
+  <app-passenger-layout
+    *ngIf="user.type === 'PASSENGER'"
+    [user]="user"
+  ></app-passenger-layout>
+  <app-driver-layout
+    *ngIf="user.type === 'DRIVER'"
+    [user]="user"
+  ></app-driver-layout>
+</div>

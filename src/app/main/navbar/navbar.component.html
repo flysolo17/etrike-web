@@ -1,59 +1,61 @@
-<div class="d-flex vh-100 overflow-hidden w-100">
-  <!-- Sidebar -->
-  <nav
-    class="sidebar bg-dark text-light"
-    [ngClass]="{ collapsed: isCollapsed }"
-  >
-    <div class="d-flex flex-column align-items-center p-3">
-      <div class="w-100 p-3 d-flex align-items-center justify-content-center">
-        <img
-          src="../../../assets/images/logo_2.svg"
-          [ngClass]="{
-            'logo-normal': !isCollapsed,
-            'logo-collapsed': isCollapsed
-          }"
-          class="white-tint"
-        />
-      </div>
-      <ul class="nav flex-column w-100 h-100">
-        <li
-          class="nav-item"
-          *ngFor="let tab of tabs"
-          [ngClass]="{
-            'active-tab': isRouteActive(tab.route)
-          }"
+<div class="container-fluid">
+  <div class="row flex-nowrap">
+    <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark position-fixed">
+      <div
+        class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
+      >
+        <a
+          routerLink="home"
+          class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
         >
+          <span class="fs-5 d-none d-sm-inline">Etrike</span>
+        </a>
+        <ul
+          class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+          id="menu"
+        >
+          @for (item of tabs; track $index) {
+          <li class="nav-item w-100">
+            <a
+              class="nav-link text-light d-flex"
+              [routerLink]="item.route"
+              routerLinkActive="active-link"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <fa-icon [icon]="item.selectedIcon" class="me-2"></fa-icon>
+              <small class="ms-1 flex-grow-1 d-none d-sm-inline">{{
+                item.label
+              }}</small>
+            </a>
+          </li>
+          }
+        </ul>
+        <hr />
+        <div class="dropdown pb-4">
           <a
-            [routerLink]="tab.route"
-            routerLinkActive="active"
-            class="nav-link text-light d-flex align-items-center"
+            routerLink="administration"
+            class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+            id="dropdownUser1"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
           >
-            <!-- Font Awesome Icon -->
-            <fa-icon
-              [icon]="tab.selectedIcon"
-              class="me-3"
-              [ngClass]="{
-                'icon-large': isCollapsed,
-                'icon-normal': !isCollapsed
-              }"
-            ></fa-icon>
-
-            <!-- Label (conditionally hidden when collapsed) -->
-            <span class="tab-label" *ngIf="!isCollapsed">{{ tab.label }}</span>
+            <img
+              [src]="admin$?.profile || '../../../assets/images/person.png'"
+              alt="Profile"
+              width="30"
+              height="30"
+              class="rounded-circle"
+            />
+            <span class="d-none d-sm-inline mx-1">{{ admin$?.name }}</span>
           </a>
-        </li>
-      </ul>
+        </div>
+      </div>
+    </div>
 
-      <button class="btn btn-light">Logout</button>
-    </div>
-  </nav>
-  <div class="flex-grow-1 overflow-auto">
-    <div class="w-100 sticky-top bg-dark p-3">
-      <button class="btn btn-outline-light btn-sm" (click)="toggleSidebar()">
-        <fa-icon [icon]="hamburger"></fa-icon>
-      </button>
-    </div>
-    <div class="w-100 overflow-auto">
+    <div
+      class="col offset-md-3 offset-xl-2"
+      style="overflow-y: auto; max-height: 100vh"
+    >
       <router-outlet></router-outlet>
     </div>
   </div>

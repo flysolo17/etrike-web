@@ -1,1 +1,32 @@
-<p>administration works!</p>
+<div
+  class="w-100 h-100 d-flex align-items-center justify-content-center p-3"
+  *ngIf="admin$ | async as admin"
+>
+  <div class="card w-50">
+    <div class="card-header">
+      <h6>Profile</h6>
+    </div>
+    <div class="card-body">
+      <div
+        class="d-flex flex-column g-1 align-items-center justify-content-center"
+      >
+        <img
+          [src]="admin?.profile || '../../../assets/images/person.png'"
+          alt="placeholder"
+          class="rounded-circle"
+          width="110"
+          height="110"
+        />
+        <h5>{{ admin.name }}</h5>
+        <p class="text-muted">{{ admin.username }}</p>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="d-flex align-items-center justify-content-center gap-3">
+        <button class="btn btn-success">Edit Profile</button>
+        <button class="btn btn-outline-danger">Change Password</button>
+        <button class="btn btn-danger" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,54 +1,72 @@
-<div class="container-fluid p-3">
-  <div class="bg-white">
-    <div class="d-flex flex-column">
-      <div
-        class="d-flex justify-content-between align-items-center p-3 bg-dark text-light"
-      >
-        <h5>Driver's Account</h5>
-        <div class="d-flex gap-2 w-25">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Search..."
-            [formControl]="searchTem$"
-          />
-          <button class="btn btn-primary" (click)="createDriver()">Add</button>
-        </div>
-      </div>
-      <table class="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Fullname</th>
-            <th scope="col">Phone</th>
-            <th scope="col">Email</th>
-            <th scope="col">Status</th>
-            <th scope="col">Active Franchise</th>
-            <th scope="col">Franchise Number</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let driver of filterDrivers$ | async; index as i">
-            <th scope="row">{{ i + 1 }}</th>
-            <td>{{ driver.driver?.name }}</td>
-            <td>{{ driver.driver?.phone }}</td>
-            <td>{{ driver.driver?.email }}</td>
-            <td>
-              <span
-                class="badge"
-                [ngClass]="{
-                  'text-bg-success': driver?.driver?.active === true,
-                  'text-bg-secondary': driver?.driver?.active === false
-                }"
-              >
-                {{ driver?.driver?.active ? "Active" : "Not Active" }}
-              </span>
-            </td>
-            <td>{{ countActiveFranchise(driver.franchises) }}</td>
-            <td>{{ getActiveFranchise(driver.franchises) }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <h5>Drivers</h5>
+  <div class="w-50 d-flex align-items-center gap-3">
+    <input
+      type="text"
+      class="form-control flex-grow-1 search-input"
+      placeholder="Search by name"
+      [formControl]="searchTerm$"
+    />
+    <button class="btn btn-success" (click)="createDriver()">Create</button>
   </div>
 </div>
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Fullname</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Email</th>
+      <th scope="col">Status</th>
+      <th scope="col">Active Franchise</th>
+      <th scope="col">Franchise Number</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- [routerLink]="[driver.driver?.id ?? '']" -->
+    <tr *ngFor="let driver of filterDrivers$ | async; index as i">
+      <th scope="row">{{ i + 1 }}</th>
+      <td>{{ driver.driver?.name }}</td>
+      <td>{{ driver.driver?.phone }}</td>
+      <td>{{ driver.driver?.email }}</td>
+      <td>
+        <span
+          class="badge"
+          [ngClass]="{
+            'text-bg-success': driver?.driver?.active === true,
+            'text-bg-secondary': driver?.driver?.active === false
+          }"
+        >
+          {{ driver?.driver?.active ? "Active" : "Not Active" }}
+        </span>
+      </td>
+      <td>{{ countActiveFranchise(driver.franchises) }}</td>
+      <td>{{ getActiveFranchise(driver.franchises) }}</td>
+      <td>
+        <div ngbDropdown class="d-inline-block">
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            id="dropdownBasic1"
+            ngbDropdownToggle
+          >
+            Edit
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button
+              ngbDropdownItem
+              *ngFor="let status of status$"
+              (click)="updateFranchiseStatus(status, driver.franchises)"
+            >
+              {{ status }}
+            </button>
+            <button ngbDropdownItem [routerLink]="[driver.driver?.id ?? '']">
+              View
+            </button>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

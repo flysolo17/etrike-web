@@ -25,7 +25,16 @@ export const BOOKING_COLLECTION = 'transactions';
 })
 export class BookingService {
   constructor(private firestore: Firestore) {}
-
+  getAllBookings(): Observable<Transactions[]> {
+    const q = query(
+      collection(this.firestore, BOOKING_COLLECTION).withConverter(
+        TransactionsConverter
+      ),
+      orderBy('updatedAt', 'desc'),
+      orderBy('createdAt', 'desc')
+    );
+    return collectionData(q);
+  }
   getBookingWithDriverAndPassenger(): Observable<
     BookingsWithPassengerAndDriver[]
   > {

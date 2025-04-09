@@ -1,0 +1,146 @@
+<div class="p-3" *ngIf="driver$ | async as driver; else noDriver">
+  <div class="row">
+    <div class="col-4">
+      <div class="d-flex gap-1">
+        <img
+          [src]="driver.driver?.profile || '../../../assets/images/person.png'"
+          alt="placeholder"
+          class="rounded-circle"
+          width="60"
+          height="60"
+        />
+        <div class="d-flex flex-column gap-0">
+          <h6 class="fw-bold">{{ driver.driver?.name }}</h6>
+          <div class="d-flex align-items-center">
+            <ng-container *ngFor="let star of getStars(driver.ratings)">
+              <fa-icon
+                [icon]="star"
+                [ngClass]="{
+                  'text-warning': star === starHalf || star === star,
+              
+                }"
+                class="icon-small"
+              ></fa-icon>
+            </ng-container>
+
+            <span class="fs-small"
+              >({{ getAverageRating(driver.ratings) | number : "1.1-1" }})</span
+            >
+          </div>
+        </div>
+      </div>
+      <div class="d-flex flex-column gap-0 pt-3">
+        <h5>About Driver</h5>
+        <app-driver-info [title]="'Name'" [value]="driver.driver?.name ?? ''" />
+        <app-driver-info
+          [title]="'Email'"
+          [value]="driver.driver?.email ?? ''"
+        />
+        <app-driver-info
+          [title]="'Phone'"
+          [value]="driver.driver?.phone ?? ''"
+        />
+        <app-driver-info
+          [title]="'Active'"
+          [value]="driver.driver?.active ? 'Yes' : 'No'"
+        />
+        <hr />
+        <h5>Franchise Info</h5>
+        <app-driver-info
+          [title]="'Franchises'"
+          [value]="driver.franchises.length.toString()"
+        />
+        <app-driver-info
+          [title]="'Active Franchise'"
+          [value]="getActiveFranchise(driver.franchises)[0].toString()"
+        />
+        <app-driver-info
+          [title]="'Status'"
+          [value]="getActiveFranchiseStatus(driver.franchises)"
+        />
+      </div>
+    </div>
+    <div class="col-8">
+      <div class="row">
+        <div class="col-3">
+          <div class="box bg-dark text-light">
+            <small>Franchise Status</small>
+            <h5>{{ getActiveFranchiseStatus(driver.franchises) }}</h5>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="box bg-dark text-light">
+            <small>Reports</small>
+            <h5>{{ driver.report.length }}</h5>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="box bg-dark text-light">
+            <small>Emergencies</small>
+            <h5>{{ driver.emergency.length }}</h5>
+          </div>
+        </div>
+
+        <div class="col-3">
+          <div class="box bg-dark text-light">
+            <small>Total Ratings</small>
+            <h5>{{ getRatingTotal(driver.ratings) }}</h5>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="p-3 rounded-3">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Pickup</th>
+                  <th scope="col">Dropoff</th>
+
+                  <th scope="col">Status</th>
+                  <th scope="col">Last Updated</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let trip of transactions$ | async">
+                  <td>{{ trip.id }}</td>
+                  <td>{{ trip.locationDetails?.pickup?.name }}</td>
+                  <td>{{ trip.locationDetails?.dropOff?.name }}</td>
+
+                  <td>
+                    <span
+                      class="badge"
+                      [ngClass]="{
+                        'text-bg-warning':
+                          trip?.status === 'PENDING' || trip?.status === 'OTW',
+                        'text-bg-success':
+                          trip?.status === 'CONFIRMED' ||
+                          trip?.status === 'ACCEPTED',
+                        'text-bg-primary': trip?.status === 'COMPLETED',
+                        'text-bg-danger': trip?.status === 'CANCELLED',
+                        'text-bg-secondary': trip?.status === 'FAILED'
+                      }"
+                    >
+                      {{ trip?.status }}
+                    </span>
+                  </td>
+                  <td>{{ trip.updatedAt | date : "short" }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <h5>Ratings</h5>
+        </div>
+        <div class="col" *ngFor="let ratings of driver.ratings">
+          <app-rating-card [rating]="ratings" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #noDriver>
+  <p>No driver data found.</p>
+</ng-template>

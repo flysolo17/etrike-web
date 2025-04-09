@@ -2,3 +2,9 @@
   border-radius: 10px;
   padding: 1rem;
 }
+.data {
+  display: flex;
+  flex-grow: 1;
+  gap: 10px;
+  align-items: center;
+}

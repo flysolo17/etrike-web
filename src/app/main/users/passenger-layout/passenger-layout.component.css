@@ -1,0 +1,25 @@
+/* tabs */
+
+.nav-pills {
+  display: flex;
+  width: 100%;
+}
+
+.nav-pills button {
+  width: 100%;
+  text-align: center;
+}
+
+.nav-fill .nav-link {
+  border: none;
+  color: darkgrey;
+}
+.nav-pills .nav-link.active {
+  background-color: var(--bg-dark);
+  color: white;
+}
+
+.tab-content {
+  border-radius: 10px;
+  padding: 1rem;
+}

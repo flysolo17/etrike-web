@@ -10,6 +10,11 @@ import { AdministrationComponent } from './main/administration/administration.co
 import { DocumentsComponent } from './main/documents/documents.component';
 import { HelpComponent } from './main/help/help.component';
 import { BookingComponent } from './main/booking/booking.component';
+import { ViewDriverComponent } from './main/driver/view-driver/view-driver.component';
+import { CompleteOrderComponent } from './payment/complete-order/complete-order.component';
+import { CancelOrderComponent } from './payment/cancel-order/cancel-order.component';
+import { PayoutsComponent } from './main/payouts/payouts.component';
+import { ViewUserComponent } from './main/users/view-user/view-user.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -17,6 +22,17 @@ const routes: Routes = [
     path: 'login',
     component: LoginComponent,
   },
+
+  {
+    path: 'complete-order/:id',
+    component: CompleteOrderComponent,
+  },
+
+  {
+    path: 'cancel-order/:id',
+    component: CancelOrderComponent,
+  },
+
   {
     path: 'main',
     component: NavbarComponent,
@@ -34,12 +50,24 @@ const routes: Routes = [
         component: DriverComponent,
       },
       {
-        path: 'passenger',
+        path: 'driver/:id',
+        component: ViewDriverComponent,
+      },
+      {
+        path: 'users',
         component: UsersComponent,
+      },
+      {
+        path: 'users/:id',
+        component: ViewUserComponent,
       },
       {
         path: 'booking',
         component: BookingComponent,
+      },
+      {
+        path: 'payouts',
+        component: PayoutsComponent,
       },
       {
         path: 'report',

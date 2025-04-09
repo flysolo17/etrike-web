@@ -1,0 +1,37 @@
+<div class="box p-3 rounded-3 border" *ngIf="passenger$ | async as passenger">
+  <div class="row">
+    <div class="col-2">
+      <img
+        [src]="passenger.profile || '../../../assets/images/person.png'"
+        alt="placeholder"
+        class="rounded-circle"
+        width="50"
+        height="50"
+      />
+    </div>
+    <div class="col-10">
+      <div class="d-flex flex-column gap-0">
+        <h6 class="fw-bold">{{ passenger.name }}</h6>
+        <div class="d-flex align-items-center">
+          <ng-container *ngFor="let star of getStars(rating)">
+            <fa-icon
+              [icon]="star"
+              [ngClass]="{
+                  'text-warning': star === starHalf || star === star,
+              
+                }"
+              class="icon-small"
+            ></fa-icon>
+          </ng-container>
+
+          <span class="fs-small">({{ rating.stars | number : "1.1-1" }})</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <p>
+        {{ rating.message }}
+      </p>
+    </div>
+  </div>
+</div>

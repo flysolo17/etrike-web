@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import {
   collection,
   collectionData,
+  doc,
+  docData,
   Firestore,
   query,
   where,
 } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { User, UserConverter, UserType } from '../models/driver/Users';
+import { USERS_COLLECTION } from './driver.service';
 
 export const PASSENGER_COLLECTION = 'users';
 @Injectable({
@@ -24,5 +27,12 @@ export class PassengerService {
       where('type', '==', UserType.PASSENGER)
     );
     return collectionData(q);
+  }
+  getPassengerByID(passengerID: string): Observable<User | null> {
+    return docData(
+      doc(this.firestore, USERS_COLLECTION, passengerID).withConverter(
+        UserConverter
+      )
+    ).pipe(map((user) => user ?? null));
   }
 }

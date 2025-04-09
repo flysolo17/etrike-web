@@ -1,0 +1,36 @@
+.box-1 {
+  border-left: 16px solid #5474c4;
+}
+.box-2 {
+  border-left: 16px solid #91cc75;
+}
+
+.box-3 {
+  border-left: 16px solid #73c0de;
+}
+
+/* tabs */
+
+.nav-pills {
+  display: flex;
+  width: 100%;
+}
+
+.nav-pills button {
+  width: 100%;
+  text-align: center;
+}
+
+.nav-fill .nav-link {
+  border: none;
+  color: darkgrey;
+}
+.nav-pills .nav-link.active {
+  background-color: var(--bg-dark);
+  color: white;
+}
+
+.tab-content {
+  border-radius: 10px;
+  padding: 1rem;
+}

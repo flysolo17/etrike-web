@@ -1,0 +1,62 @@
+<div
+  class="box p-3 rounded-3 border border-secondary"
+  [routerLink]="[driver.driver?.id ?? '']"
+>
+  <div class="row">
+    <div class="col-2">
+      <img
+        [src]="driver.driver?.profile || '../../../assets/images/person.png'"
+        alt="placeholder"
+        class="rounded-circle"
+        width="60"
+        height="60"
+      />
+    </div>
+    <div class="col-10">
+      <div class="d-flex flex-column gap-0">
+        <h6 class="fw-bold">{{ driver.driver?.name }}</h6>
+        <div class="d-flex align-items-center">
+          <ng-container *ngFor="let star of getStars(driver.ratings)">
+            <fa-icon
+              [icon]="star"
+              [ngClass]="{
+                  'text-warning': star === starHalf || star === star,
+              
+                }"
+              class="icon-small"
+            ></fa-icon>
+          </ng-container>
+
+          <span class="fs-small"
+            >({{ getAverageRating(driver.ratings) | number : "1.1-1" }})</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6">
+      <small class="text-muted">Status</small> <br />
+      <span
+        class="badge"
+        [ngClass]="{
+          'text-bg-success': driver.driver?.active === true,
+          'text-bg-secondary': driver.driver?.active === false
+        }"
+      >
+        {{ driver.driver?.active ? "Active" : "Not Active" }}
+      </span>
+    </div>
+    <div class="col-6">
+      <small class="text-muted">Active Franchise</small>
+      <p class="fw-bold">{{ getActiveFranchise(driver.franchises) }}</p>
+    </div>
+    <div class="col-6">
+      <small class="text-muted">Reports</small>
+      <p class="fw-bold">{{ driver.report.length }}</p>
+    </div>
+    <div class="col-6">
+      <small class="text-muted">Emergency</small>
+      <p class="fw-bold">{{ driver.emergency.length }}</p>
+    </div>
+  </div>
+</div>

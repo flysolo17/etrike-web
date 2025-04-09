@@ -1,0 +1,41 @@
+<div class="mt-3 box">
+  <ul ngbNav #nav="ngbNav" class="nav-pills">
+    <li ngbNavItem>
+      <button ngbNavLink>Information</button>
+      <ng-template ngbNavContent>
+        <div class="row g-3">
+          <div class="col">
+            <h6>Personal Info</h6>
+            <app-user-info
+              [data]="'Name'"
+              [value]="user?.name ?? 'N/A'"
+            ></app-user-info>
+            <app-user-info
+              [data]="'Email'"
+              [value]="user?.email ?? 'N/A'"
+            ></app-user-info>
+            <app-user-info
+              [data]="'Phone'"
+              [value]="user?.phone ?? 'N/A'"
+            ></app-user-info>
+          </div>
+          <div class="col">
+            <h6>Contacts</h6>
+
+            @for (item of contacts$ | async; track $index) {
+            <app-user-info
+              [data]="item.name + ' (' + item.type + ')'"
+              [value]="item.phone"
+            ></app-user-info>
+            }
+          </div>
+        </div>
+      </ng-template>
+    </li>
+    <li ngbNavItem>
+      <button ngbNavLink>Second</button>
+      <ng-template ngbNavContent>Second content</ng-template>
+    </li>
+  </ul>
+  <div [ngbNavOutlet]="nav"></div>
+</div>
