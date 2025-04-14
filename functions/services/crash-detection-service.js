@@ -85,7 +85,7 @@ async function sendAlertMessage(passengerID, crashId, location) {
       .collection("users")
       .doc(passengerID.trim())
       .get();
-    let loc = `https://www.google.com/maps?q=${location}`;
+    let loc = `https://maps.app.goo.gl/v4Uez8J8D7KTsWWD6`;
     if (!passengerSnapshot.exists) {
       console.log(`Passenger with ID ${passengerID} not found.`);
       return;

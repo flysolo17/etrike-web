@@ -3,13 +3,14 @@
     <div class="col">
       <div class="box box-1">
         <small class="text-muted">Crashes</small>
-        <div class="d-flex gap-2 mt-3">
+        <div class="d-flex gap-2 mt-3" *ngIf="crashes$ | async as crashes">
           <div class="flex-grow-1">
-            <h6>{{ 0 }}</h6>
+            <h6>{{ crashes.length }}</h6>
+
             <small class="text-muted">All</small>
           </div>
           <div class="flex-grow-1">
-            <h6>{{ 0 }}</h6>
+            <h6>{{ crashesLastWeek(crashes) }}</h6>
             <small class="text-muted">Last 7 days</small>
           </div>
         </div>
@@ -17,15 +18,15 @@
     </div>
 
     <div class="col">
-      <div class="box box-2">
+      <div class="box box-2" *ngIf="emegency$ | async as emegency">
         <small class="text-muted">Emergencies</small>
         <div class="d-flex gap-2 mt-3">
           <div class="flex-grow-1">
-            <h6>{{ 0 }}</h6>
+            <h6>{{ emegency.length }}</h6>
             <small class="text-muted">All</small>
           </div>
           <div class="flex-grow-1">
-            <h6>{{ 0 }}</h6>
+            <h6>{{ emergenciesLastWeek(emegency) }}</h6>
             <small class="text-muted">Last 7 days</small>
           </div>
         </div>
@@ -35,13 +36,13 @@
     <div class="col">
       <div class="box box-3">
         <small class="text-muted">Reports</small>
-        <div class="d-flex gap-2 mt-3">
+        <div class="d-flex gap-2 mt-3" *ngIf="reports$ | async as reports">
           <div class="flex-grow-1">
-            <h6>{{ 0 }}</h6>
+            <h6>{{ reports.length }}</h6>
             <small class="text-muted">All</small>
           </div>
           <div class="flex-grow-1">
-            <h6>{{ 0 }}</h6>
+            <h6>{{ reportsLastWeek(reports) }}</h6>
             <small class="text-muted">Last 7 days</small>
           </div>
         </div>
@@ -84,27 +85,21 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (emergency of emegency$ | async; track
-                  emergency.transactionID; let i = $index) {
+                  @for (item of crashes$ | async; track item.id; let i = $index)
+                  {
                   <tr>
                     <td>
                       <ngb-highlight
                         style="font-size: smaller"
                         class="text-muted"
-                        [result]="
-                          emergency.location
-                            ? emergency.location.latitude +
-                              ', ' +
-                              emergency.location.longitude
-                            : ''
-                        "
+                        [result]="location(item.crash.location + '')"
                         [term]="emergencyFilter.value"
                       />
                     </td>
                     <td>
                       <ngb-highlight
                         style="font-size: smaller"
-                        [result]="emergency.driverInfo?.name"
+                        [result]="item.driver?.name"
                         [term]="emergencyFilter.value"
                       />
                     </td>
@@ -112,7 +107,7 @@
                     <td>
                       <ngb-highlight
                         style="font-size: smaller"
-                        [result]="emergency.passengerInfo?.name"
+                        [result]="item.user?.name"
                         [term]="emergencyFilter.value"
                       />
                     </td>
@@ -121,19 +116,19 @@
                         style="font-size: smaller !important"
                         class="badge"
                         [ngClass]="
-                          emergency.status === 'OPEN'
+                          item.crash.status === 'PENDING'
                             ? 'text-bg-success'
                             : 'text-bg-danger'
                         "
                       >
-                        {{ emergency.status }}
+                        {{ item.crash.status }}
                       </span>
                     </td>
                     <td>
                       <ngb-highlight
                         style="font-size: smaller"
                         [result]="
-                          emergency.updatedAt | date : 'MMM dd, hh:mm a'
+                          item.crash.updatedAt | date : 'MMM dd, hh:mm a'
                         "
                         [term]="emergencyFilter.value"
                       />
@@ -141,7 +136,7 @@
                     <td>
                       <button
                         class="btn btn-sm btn-primary"
-                        (click)="viewOnMap(emergency.location!!)"
+                        (click)="viewCrashOnMap(item.crash.location + '')"
                       >
                         View
                       </button>
@@ -348,6 +343,7 @@
             </ng-template>
           </li>
         </ul>
+
         <div [ngbNavOutlet]="nav"></div>
       </div>
     </div>

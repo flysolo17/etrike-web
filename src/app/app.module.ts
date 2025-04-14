@@ -43,6 +43,8 @@ import { ViewUserComponent } from './main/users/view-user/view-user.component';
 import { PassengerLayoutComponent } from './main/users/passenger-layout/passenger-layout.component';
 import { DriverLayoutComponent } from './main/users/driver-layout/driver-layout.component';
 import { UserInfoComponent } from './main/users/user-info/user-info.component';
+import { CreateDocumentModalComponent } from './main/users/create-document-modal/create-document-modal.component';
+import { DocumentCardComponent } from './main/users/document-card/document-card.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +75,8 @@ import { UserInfoComponent } from './main/users/user-info/user-info.component';
     PassengerLayoutComponent,
     DriverLayoutComponent,
     UserInfoComponent,
+    CreateDocumentModalComponent,
+    DocumentCardComponent,
   ],
   imports: [
     BrowserModule,

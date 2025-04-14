@@ -1,5 +1,12 @@
 import { QueryDocumentSnapshot } from '@angular/fire/firestore';
+import { User } from '../driver/Users';
 
+export interface CrashWithUsers {
+  id: string;
+  crash: Crash;
+  driver?: User | null;
+  user?: User | null;
+}
 export interface Crash {
   driverID?: string;
   passengerID?: string;

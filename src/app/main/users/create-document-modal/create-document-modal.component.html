@@ -1,0 +1,51 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">Create Document</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.close()"
+  ></button>
+</div>
+<div class="modal-body">
+  <form
+    [formGroup]="documentForm$"
+    (ngSubmit)="submit()"
+    class="needs-validation"
+  >
+    <div class="form-floating mb-3">
+      <input
+        type="file"
+        formControlName="document"
+        class="form-control"
+        id="floatingInput"
+        (change)="onFileSelected($event)"
+        required
+      />
+      <label for="floatingInput">Document</label>
+    </div>
+    <div class="form-floating">
+      <select
+        class="form-select"
+        required
+        formControlName="type"
+        id="floatingSelect"
+        aria-label="Floating label select example"
+      >
+        <option selected value="null">Select Document Type</option>
+        @for (item of documentTypes; track $index) {
+        <option [value]="item">{{ item }}</option>
+        }
+      </select>
+      <label for="floatingSelect">Document Type</label>
+    </div>
+    <button
+      class="btn btn-success w-100 mt-3"
+      [disabled]="!documentForm$.valid || loading"
+      type="submit"
+    >
+      <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+      <span *ngIf="!loading">Create Document</span>
+    </button>
+  </form>
+</div>

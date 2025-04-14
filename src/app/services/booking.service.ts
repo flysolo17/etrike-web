@@ -10,6 +10,7 @@ import {
   Firestore,
   orderBy,
   query,
+  where,
 } from '@angular/fire/firestore';
 import {
   Transactions,
@@ -82,6 +83,42 @@ export class BookingService {
             );
           })
         )
+      )
+    );
+  }
+
+  getPassengerBookings(passengerID: string): Observable<Transactions[]> {
+    const q = query(
+      collection(this.firestore, BOOKING_COLLECTION).withConverter(
+        TransactionsConverter
+      ),
+      where('passengerID', '==', passengerID),
+      orderBy('updatedAt', 'desc'),
+      orderBy('createdAt', 'desc')
+    );
+    return collectionData(q).pipe(
+      map((transactions: Transactions[]) =>
+        transactions.filter((transaction) => {
+          return transaction.passengerID === passengerID;
+        })
+      )
+    );
+  }
+
+  getDriverBookings(driverID: string): Observable<Transactions[]> {
+    const q = query(
+      collection(this.firestore, BOOKING_COLLECTION).withConverter(
+        TransactionsConverter
+      ),
+      where('driverID', '==', driverID),
+      orderBy('updatedAt', 'desc'),
+      orderBy('createdAt', 'desc')
+    );
+    return collectionData(q).pipe(
+      map((transactions: Transactions[]) =>
+        transactions.filter((transaction) => {
+          return transaction.driverID === driverID;
+        })
       )
     );
   }

@@ -4,7 +4,7 @@
       <button ngbNavLink>Information</button>
       <ng-template ngbNavContent>
         <div class="row g-3">
-          <div class="col">
+          <div class="col-12">
             <h6>Personal Info</h6>
             <app-user-info
               [data]="'Name'"
@@ -19,7 +19,10 @@
               [value]="user?.phone ?? 'N/A'"
             ></app-user-info>
           </div>
-          <div class="col">
+          <div class="col-12">
+            <hr />
+          </div>
+          <div class="col-12">
             <h6>Contacts</h6>
 
             @for (item of contacts$ | async; track $index) {
@@ -33,8 +36,34 @@
       </ng-template>
     </li>
     <li ngbNavItem>
-      <button ngbNavLink>Second</button>
-      <ng-template ngbNavContent>Second content</ng-template>
+      <button ngbNavLink>Transactions</button>
+      <ng-template ngbNavContent>
+        <table class="table table-borderless table-hover">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Type</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Status</th>
+              <th scope="col">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of transactions$ | async; track $index) {
+            <tr>
+              <td>{{ item.id }}</td>
+              <td>
+                {{ item.locationDetails?.pickup?.name }} -
+                {{ item.locationDetails?.dropOff?.name }}
+              </td>
+              <td>{{ item.payment?.amount | currency : "PHP" }}</td>
+              <td>{{ item.status }}</td>
+              <td>{{ item.updatedAt | date : "shortDate" }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </ng-template>
     </li>
   </ul>
   <div [ngbNavOutlet]="nav"></div>

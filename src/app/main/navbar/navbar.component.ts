@@ -55,16 +55,7 @@ export class NavbarComponent implements OnInit {
       route: 'administration',
       selectedIcon: faCog,
     },
-    {
-      label: 'Documents',
-      route: 'documents',
-      selectedIcon: faFile,
-    },
-    {
-      label: 'Help',
-      route: 'help',
-      selectedIcon: faQuestionCircle,
-    },
+
     {
       label: 'Payouts',
       route: 'payouts',

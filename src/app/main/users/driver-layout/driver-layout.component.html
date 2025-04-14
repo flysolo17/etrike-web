@@ -1,1 +1,81 @@
-<p>driver-layout works!</p>
+<div class="mt-3 box">
+  <ul ngbNav #nav="ngbNav" class="nav-pills">
+    <li ngbNavItem>
+      <button ngbNavLink>Information</button>
+      <ng-template ngbNavContent>
+        <div class="row g-3">
+          <div class="col-12">
+            <h6>Personal Info</h6>
+            <app-user-info
+              [data]="'Name'"
+              [value]="user?.name ?? 'N/A'"
+            ></app-user-info>
+            <app-user-info
+              [data]="'Email'"
+              [value]="user?.email ?? 'N/A'"
+            ></app-user-info>
+            <app-user-info
+              [data]="'Phone'"
+              [value]="user?.phone ?? 'N/A'"
+            ></app-user-info>
+          </div>
+        </div>
+      </ng-template>
+    </li>
+    <li ngbNavItem>
+      <button ngbNavLink>Documents</button>
+      <ng-template ngbNavContent>
+        <div class="row">
+          <div class="col-12">
+            <div class="d-flex align-items-center justify-content-between">
+              <h6></h6>
+              <button class="btn btn-success btn-sm" (click)="createDocument()">
+                <fa-icon [icon]="add" /> New
+              </button>
+            </div>
+          </div>
+          @for (item of documents$ | async; track $index) {
+          <div class="col-4">
+            <app-document-card
+              [document]="item"
+              (onDelete)="onDeleteDocument($event)"
+              (onClick)="newTab(item.url)"
+            />
+          </div>
+          }
+        </div>
+      </ng-template>
+    </li>
+    <li ngbNavItem>
+      <button ngbNavLink>Transactions</button>
+      <ng-template ngbNavContent>
+        <table class="table table-borderless table-hover">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Type</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Status</th>
+              <th scope="col">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of transactions$ | async; track $index) {
+            <tr>
+              <td>{{ item.id }}</td>
+              <td>
+                {{ item.locationDetails?.pickup?.name }} -
+                {{ item.locationDetails?.dropOff?.name }}
+              </td>
+              <td>{{ item.payment?.amount | currency : "PHP" }}</td>
+              <td>{{ item.status }}</td>
+              <td>{{ item.updatedAt | date : "shortDate" }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </ng-template>
+    </li>
+  </ul>
+  <div [ngbNavOutlet]="nav"></div>
+</div>

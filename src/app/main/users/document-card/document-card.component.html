@@ -1,0 +1,86 @@
+<div class="card shadow-sm border-0" style="width: 18rem">
+  <div class="card-body p-2">
+    <!-- Title + Dropdown Row -->
+    <div class="d-flex justify-content-between align-items-start mb-2">
+      <h6
+        class="card-title mb-0 text-truncate me-2"
+        style="flex-grow: 1"
+        [title]="document.type"
+      >
+        {{ document.type }}
+      </h6>
+      <div ngbDropdown class="ms-2">
+        <button
+          type="button"
+          class="btn btn-sm btn-outline-primary"
+          id="dropdownBasic1"
+          ngbDropdownToggle
+        >
+          ⋮
+        </button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button ngbDropdownItem (click)="openDocumentNewTab()">View</button>
+          <button ngbDropdownItem (click)="deleteDocumentHandler()">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preview Area -->
+    <div
+      class="bg-light p-2 rounded small"
+      style="height: 200px; overflow: hidden; font-family: monospace"
+    >
+      <ng-container [ngSwitch]="document.extension">
+        <ng-container *ngSwitchCase="'jpg'">
+          <img
+            [src]="document.url"
+            alt="Image Preview"
+            class="img-fluid rounded"
+            style="max-height: 100%; max-width: 100%; object-fit: cover"
+          />
+        </ng-container>
+        <ng-container *ngSwitchCase="'jpeg'">
+          <img
+            [src]="document.url"
+            alt="Image Preview"
+            class="img-fluid rounded"
+            style="max-height: 100%; max-width: 100%; object-fit: cover"
+          />
+        </ng-container>
+        <ng-container *ngSwitchCase="'png'">
+          <img
+            [src]="document.url"
+            alt="Image Preview"
+            class="img-fluid rounded"
+            style="max-height: 100%; max-width: 100%; object-fit: cover"
+          />
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'pdf'">
+          <iframe
+            [src]="document.url"
+            class="w-100 h-100"
+            style="border: none"
+            title="PDF Preview"
+          ></iframe>
+        </ng-container>
+
+        <ng-container *ngSwitchDefault>
+          <div class="text-center text-muted">
+            <i class="bi bi-file-earmark-text fs-1"></i>
+            <p class="mb-0">Preview not available</p>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-2 d-flex align-items-center">
+      <small class="text-muted"
+        >Date • {{ document.createdAt | date : "medium" }}</small
+      >
+    </div>
+  </div>
+</div>

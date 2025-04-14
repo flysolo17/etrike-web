@@ -6,7 +6,7 @@ import { Reports } from '../../models/report/report';
 import { EmergencyService } from '../../services/emergency.service';
 import { Emergency, LocationInfo } from '../../models/emergency/emergency';
 import { CrashesService } from '../../services/crashes.service';
-import { Crash } from '../../models/crashes/Crash';
+import { Crash, CrashWithUsers } from '../../models/crashes/Crash';
 
 @Component({
   selector: 'app-report',
@@ -58,16 +58,11 @@ export class ReportComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  searchCrashes(crashes: Crash[], text: string): Crash[] {
+  searchCrashes(crashes: CrashWithUsers[], text: string): CrashWithUsers[] {
     if (!text.trim()) return crashes;
     const term = text.toLowerCase();
-    return crashes.filter((crash: Crash) =>
-      [
-        crash.impact?.toString(),
-        crash.location,
-        crash.driverID,
-        crash.passengerID,
-      ]
+    return crashes.filter((crash: CrashWithUsers) =>
+      [crash.crash.impact?.toString(), , crash.driver?.name, crash.user?.name]
         .filter(Boolean)
         .some((field) => field?.toLowerCase().includes(term))
     );
@@ -109,5 +104,25 @@ export class ReportComponent implements OnInit {
       `https://www.google.com/maps/search/?api=1&query=${location.latitude},${location.longitude}`,
       '_blank'
     );
+  }
+  viewCrashOnMap(location: string) {
+    window.open(location, '_blank');
+  }
+
+  crashesLastWeek(crashes: CrashWithUsers[]): number {
+    const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    return crashes.filter((crash) => crash.crash.createdAt > oneWeekAgo).length;
+  }
+  reportsLastWeek(reports: Reports[]): number {
+    const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    return reports.filter((report) => report.createdAt > oneWeekAgo).length;
+  }
+  emergenciesLastWeek(emergencies: Emergency[]): number {
+    const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    return emergencies.filter((emergency) => emergency.createdAt > oneWeekAgo)
+      .length;
+  }
+  location(url: string): string {
+    return url?.split('q=')[1];
   }
 }
